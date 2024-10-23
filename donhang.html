@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sản Phẩm</title>
+    <link href="images/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>    
+    <header>
+        <img id="header-img1" src="images/header-img1.png" alt="" >
+        <img id="header-img2" src="images/header-img2.png" alt="" >
+        <img id="header-img3" src="images/header-img3.png" alt="" >
+        <a id="#top" href="trangchu.html" ><img src="images/logo.png" alt=""></a>        
+        <nav>
+            <a href="trangchu.html">Trang Chủ</a>                    
+            <a href="gioithieu.html">Giới Thiệu</a>
+            <a href="sanpham.html">Sản Phẩm</a>
+            <a href="tintuc.html">Tin Tức</a>
+            <a href="dangnhap.html">Đăng Nhập</a>
+            <a href="dangky.html">Đăng Ký</a>
+            <a href="lienhe.html">Liên Hệ</a>
+            <div class="search-container">
+                <form method="get" action="#">
+                <div class="input-container">                    
+                    <input id="search" class="search-input" type="text" placeholder="Nhập nội dung cần tìm..." name="search">
+                    <i class="fa fa-search icon-white"></i>
+                    <i class="fa fa-shopping-cart icon-pink"></i>
+                </div>
+                </form>        
+            </div>            
+        </nav>
+    </header>
+    <main class="one-col">
+        <h1>CHI TIẾT ĐƠN HÀNG</h1>
+        <table style="border: 1px solid black; margin-bottom: 100px;">
+            <thead>
+                <tr>
+                    <th style="width: 100px;">Hình Ảnh SP</th>
+                    <th style="width: 200px;">Tên Sản Phẩm</th>
+                    <th style="width: 20px;">Số Lượng</th>
+                    <th style="width: 100px;">Giá</th>
+                    <th style="width: 100px;">Tổng</th>
+                    <th style="width: 50px;">Xóa</th>
+                </tr>
+            </thead>
+            <tbody id="orderDetails">
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td id="A" colspan="6" style="text-align: right;">Tổng Thành Tiền (A) = 0vnđ </td>
+                </tr>
+                <tr>
+                    <td id="B" colspan="6" style="text-align: right;">Chiết Khấu (B) = 0vnđ</td>
+                </tr>
+                <tr>
+                    <td id="C" colspan="6" style="text-align: right;">Thuế (C) = 0vnđ</td>
+                </tr>
+                <tr>
+                    <td id="D" colspan="6" style="text-align: right;">Tổng đơn hàng = A + B +C = 0vnđ</td>
+                </tr>
+                <tr>
+                    <td id="E" colspan="6" style="margin: auto;"><button >Xác nhận đơn hàng</button></td>
+                </tr>
+            </tfoot>
+        </table>
+    </main>
+    <script>
+         function getDiscountRate() {
+            var d = new Date(); // Lấy ngày hiện tại
+            var weekday = d.getDay(); // Lấy thứ trong tuần
+            var totalMins = d.getHours() * 60 + d.getMinutes(); // Đổi thời gian hiện tại ra số phút tương đối trong ngày
+            
+            if (weekday >= 1 && weekday <= 3 && ((totalMins >= 420 && totalMins <= 660) || (totalMins >= 780 && totalMins <= 1020))) {
+                return 0.1; // Giảm 10%
+            }
+            return 0; // Không có chiết khấu
+        }
+        function showCart() {
+            let TotalPreTax = 0; 
+            const tbody = document.getElementById('orderDetails'); 
+            const itemList = JSON.parse(localStorage.getItem('itemList')) || {};
+
+            // Lặp qua từng key trong localStorage
+            for (let key in localStorage) {
+                // Kiểm tra xem key có tồn tại trong itemList không
+                if (itemList[key]) {
+                    const item = itemList[key];
+                    const photo = item.photo;
+                    const name = item.name;
+                    const price = item.price;
+                    const orderNumber = parseInt(localStorage.getItem(key)) || 0;
+
+                    // Tạo các ô dữ liệu
+                    const row = document.createElement('tr');
+
+                    // Ô chứa hình sản phẩm
+                    const imgCell = document.createElement('td');
+                    const img = document.createElement('img');
+                    img.src = photo;
+                    img.width = 100; // Đặt kích thước ảnh
+                    imgCell.appendChild(img);
+                    row.appendChild(imgCell);
+
+                    // Ô chứa tên sản phẩm
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = name;
+                    nameCell.style.width = '100px';
+                    nameCell.style.textAlign = 'center';
+                    row.appendChild(nameCell);
+
+                    // Ô chứa số lượng
+                    const orderCell = document.createElement('td');
+                    orderCell.textContent = orderNumber;
+                    row.appendChild(orderCell);
+
+                    // Ô chứa giá
+                    const priceCell = document.createElement('td');
+                    priceCell.textContent = price.toLocaleString() + ' VND';
+                    row.appendChild(priceCell);
+
+                    // Ô chứa tổng giá
+                    const totalCell = document.createElement('td');
+                    totalCell.textContent = (price * orderNumber).toLocaleString() + ' VND';
+                    row.appendChild(totalCell);
+
+                    // Ô chứa nút xóa
+                    const removeCell = document.createElement('td');
+                    const removeLink = document.createElement('a');
+                    removeLink.href = '#';
+                    removeLink.dataset.code = key;
+                    removeLink.innerHTML = '<i class="fa fa-trash icon-pink"></i>';
+                    removeLink.onclick = function() { removeCart(this.dataset.code); };
+                    removeCell.appendChild(removeLink);
+                    row.appendChild(removeCell);
+                    
+                    // Thêm dòng vào tbody
+                    tbody.appendChild(row);
+
+                    TotalPreTax = TotalPreTax +(price * orderNumber);
+                }
+            }   
+
+            
+
+            // Cập nhật tổng thành tiền vào ô
+            document.getElementById('A').textContent = 'Tổng Thành Tiền (A) = ' + TotalPreTax.toLocaleString() + ' VNĐ';
+            const discountRate = getDiscountRate();
+            const discountAmount = TotalPreTax * discountRate;
+            document.getElementById('B').textContent = 'Chiết Khấu (B) = ' +discountRate+ ' x A =' + discountAmount.toLocaleString() + ' VNĐ';
+            const tax=0.1*(TotalPreTax-discountAmount);
+            document.getElementById('C').textContent = 'Thuế (C) = 10% x (A - B) = '+tax.toLocaleString() + ' VNĐ';
+            const sum=TotalPreTax-discountAmount+tax;
+            document.getElementById('D').textContent = 'Tổng Đơn Hàng = A - B + C = '+sum.toLocaleString() + ' VNĐ';
+        }
+
+        document.addEventListener('DOMContentLoaded', showCart);
+    </script>
+</body>
+</html>

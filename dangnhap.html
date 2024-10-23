@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập</title>
+    <link href="images/favicon.ico" rel="shortcut-ico">
+</head>
+
+<body>
+    <header>
+        <a href="trangchu.html">
+            <img src="images/logo.png" id="logo">
+        </a>
+        <nav>
+            <a href="trangchu.html">Trang chủ</a>
+            <a href="gioithieu.html">Giới thiệu</a>
+            <a href="sanpham.html">Sản phẩm</a>
+            <a href="tintuc.html">Tin tức</a>
+            <a href="dangnhap.html">Đăng nhập</a>
+            <a href="dangky.html">Đăng ký</a>
+            <a href="lienhe.html">Liên hệ</a>
+        </nav>
+    </header>
+    <main>
+        <form id="loginForm" method="post" action="trangchu.html"enctype="multipart/form-data">
+            <fieldset>
+                <legend>
+                    <h2>ĐĂNG NHẬP</h2>
+                </legend>
+                <img src="images/dangnhap/userlogin.png" width="300">
+                <table>
+                    <tr>
+                        <th>Email</th>
+                        <td>
+                            <input id="email" type="text" placeholder="Vui lòng nhập email">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Mật khẩu</th>
+                        <td>
+                            <input id="password" type="password" placeholder="Vui lòng nhập mật khẩu">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                        </th>
+                        <td>
+                            <input type = "submit" value="Đăng nhập">
+                             <input type = "reset" value = "Hủy">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Bạn quên 
+                            <a href="#"><u>mật khẩu?</u></a>
+                            <input type="checkbox"><b>Ghi nhớ cho lần đăng nhập sau</b>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </form>
+    </main>
+    <script>
+        const loginForm = document.getElementById("loginForm");
+        
+        loginForm.addEventListener("submit",function(addEventListener) {
+
+        event.preventDefault(); // Ngăn chặn gửi form cho đến khi kiểm tra xong
+
+        const emailValue = document.getElementById("email").value;
+        const passwordValue = document.getElementById("password").value;
+        const emailRegrex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+        if(!emailRegrex.test(emailValue)) {
+            alert("Định dạng email không hợp lệ!");
+            return;
+        }
+
+        if(passwordValue.length < 8) {
+            alert("Mật khẩu phải có ít nhất 8 ký tự!");
+            return;
+        }
+        loginForm.submit(); 
+        alert("Đăng nhập thành công!");
+        })
+
+    </script>
+    <footer>
+        <p>© 2021 Bản quyền thuộc về FreeezeVN.
+            <a href="#">facebook</a>
+            <a href="#">twitter</a>
+            <a href="#">pinterest</a>
+            <a href="#logo">Về Đầu Trang</a>
+        </p>
+    </footer>
+</body>
+
+</html>
